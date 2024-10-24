@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Brandon Islamic Center</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 20px;
+        }
+
+        img.logo {
+            display: block;
+            margin: 0 auto 20px;
+            max-width: 150px;
+            height: auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #555;
+            font-size: 16px;
+        }
+
+        input, textarea {
+            margin-top: 8px;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            transition: all 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #007bff;
+            background-color: #ffffff;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .prayer-time-group {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .prayer-time-group div {
+            width: 48%;
+        }
+
+        @media (max-width: 600px) {
+            .prayer-time-group {
+                flex-direction: column;
+            }
+
+            .prayer-time-group div {
+                width: 100%;
+            }
+        }
+
+        /* Styles for disabled Maghrib fields */
+        .disabled {
+            background-color: #e9ecef;
+            pointer-events: none;
+        }
+
+        /* Styles for the login form */
+        .login-container {
+            display: none;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Password Authentication -->
+    <div class="container" id="loginContainer">
+        <h2>Admin Login</h2>
+        <input type="password" id="passwordInput" placeholder="Enter Password" required>
+        <button onclick="checkPassword()">Login</button>
+        <p class="error-message" id="errorMessage">Incorrect password, please try again.</p>
+    </div>
+
+    <!-- Main Admin Panel (hidden until login) -->
+    <div class="container login-container" id="adminContainer">
+        <header>
+            <h2>Admin Panel - MOSQ</h2>
+        </header>
+        <form id="adminForm">
+            <!-- Prayer Times -->
+            <label for="fajr">Fajr Athan and Iqamah</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="fajrAthan" placeholder="Fajr Athan" required>
+                </div>
+                <div>
+                    <input type="time" id="fajrIqamah" placeholder="Fajr Iqamah" required>
+                </div>
+            </div>
+
+            <label for="zuhr">Zuhr Athan and Iqamah</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="zuhrAthan" placeholder="Zuhr Athan" required>
+                </div>
+                <div>
+                    <input type="time" id="zuhrIqamah" placeholder="Zuhr Iqamah" required>
+                </div>
+            </div>
+
+            <label for="asr">Asr Athan and Iqamah</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="asrAthan" placeholder="Asr Athan" required>
+                </div>
+                <div>
+                    <input type="time" id="asrIqamah" placeholder="Asr Iqamah" required>
+                </div>
+            </div>
+
+            <label for="maghrib">Maghrib Athan and Iqamah (Sunset Handled)</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="maghribAthan" class="disabled" placeholder="Maghrib Athan" disabled>
+                </div>
+                <div>
+                    <input type="time" id="maghribIqamah" class="disabled" placeholder="Maghrib Iqamah" disabled>
+                </div>
+            </div>
+
+            <label for="isha">Isha Athan and Iqamah</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="ishaAthan" placeholder="Isha Athan" required>
+                </div>
+                <div>
+                    <input type="time" id="ishaIqamah" placeholder="Isha Iqamah" required>
+                </div>
+            </div>
+
+            <label for="jumuah">Jumuah Athan and Iqamah</label>
+            <div class="prayer-time-group">
+                <div>
+                    <input type="time" id="jumuahAthan" placeholder="Jumuah Athan" required>
+                </div>
+                <div>
+                    <input type="time" id="jumuahIqamah" placeholder="Jumuah Iqamah" required>
+                </div>
+            </div>
+
+            <!-- Quran Verse -->
+            <label for="quranVerse">Quran Verse</label>
+            <textarea id="quranVerse" rows="3" placeholder="Enter Quran verse" required></textarea>
+
+            <!-- Announcements -->
+            <label for="announcements">Announcements</label>
+            <textarea id="announcements" rows="3" placeholder="Enter announcements (separate multiple by commas)" required></textarea>
+
+            <!-- Donation Message -->
+            <label for="donationMessage">Donation Message</label>
+            <textarea id="donationMessage" rows="3" placeholder="Enter donation message" required></textarea>
+
+            <!-- Phone Silence Message -->
+            <label for="phoneMessage">Phone Silence Message</label>
+            <textarea id="phoneMessage" rows="2" placeholder="Enter phone silence message" required></textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+    
+    <script>
+        // Hardcoded password
+        const correctPassword = "pass1";
+
+        // Password verification
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            if (passwordInput === correctPassword) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('adminForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const prayerTimes = {
+                fajrAthan: document.getElementById('fajrAthan').value,
+                fajrIqamah: document.getElementById('fajrIqamah').value,
+                zuhrAthan: document.getElementById('zuhrAthan').value,
+                zuhrIqamah: document.getElementById('zuhrIqamah').value,
+                asrAthan: document.getElementById('asrAthan').value,
+                asrIqamah: document.getElementById('asrIqamah').value,
+                maghribAthan: document.getElementById('maghribAthan').value,
+                maghribIqamah: document.getElementById('maghribIqamah').value,
+                ishaAthan: document.getElementById('ishaAthan').value,
+                ishaIqamah: document.getElementById('ishaIqamah').value,
+                jumuahAthan: document.getElementById('jumuahAthan').value,
+                jumuahIqamah: document.getElementById('jumuahIqamah').value,
+                quranVerse: document.getElementById('quranVerse').value,
+                announcements: document.getElementById('announcements').value,
+                donationMessage: document.getElementById('donationMessage').value,
+                phoneMessage: document.getElementById('phoneMessage').value
+            };
+    
+            // Send the data to the backend
+            fetch('http://127.0.0.1:5000/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(prayerTimes),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                alert("Changes Saved Successfully!");
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    
+        // Fetch current data from the backend to pre-fill the form
+        fetch('http://127.0.0.1:5000/data')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('fajrAthan').value = data.fajrAthan;
+                document.getElementById('fajrIqamah').value = data.fajrIqamah;
+                document.getElementById('zuhrAthan').value = data.zuhrAthan;
+                document.getElementById('zuhrIqamah').value = data.zuhrIqamah;
+                document.getElementById('asrAthan').value = data.asrAthan;
+                document.getElementById('asrIqamah').value = data.asrIqamah;
+                document.getElementById('maghribAthan').value = data.maghribAthan;
+                document.getElementById('maghribIqamah').value = data.maghribIqamah;
+                document.getElementById('ishaAthan').value = data.ishaAthan;
+                document.getElementById('ishaIqamah').value = data.ishaIqamah;
+                document.getElementById('jumuahAthan').value = data.jumuahAthan;
+                document.getElementById('jumuahIqamah').value = data.jumuahIqamah;
+                document.getElementById('quranVerse').value = data.quranVerse;
+                document.getElementById('announcements').value = data.announcements;
+                document.getElementById('donationMessage').value = data.donationMessage;
+                document.getElementById('phoneMessage').value = data.phoneMessage;
+            });
+    </script>
+
+</body>
+</html>
